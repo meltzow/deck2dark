@@ -1,22 +1,24 @@
 import 'package:dynamic_color/dynamic_color.dart';
-import 'package:flutter_displaymode/flutter_displaymode.dart';
-import 'package:flutter_timezone/flutter_timezone.dart';
-import 'package:todark/app/modules/home.dart';
-import 'package:todark/app/modules/onboarding.dart';
-import 'package:todark/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_displaymode/flutter_displaymode.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:get/get.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:isar/isar.dart';
-import 'package:todark/theme/theme_controller.dart';
-import 'app/data/schema.dart';
 import 'package:path_provider/path_provider.dart';
-import 'translation/translation.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
+import 'package:todark/app/modules/home.dart';
+import 'package:todark/app/modules/onboarding.dart';
+import 'package:todark/env.dart';
+import 'package:todark/theme/theme.dart';
+import 'package:todark/theme/theme_controller.dart';
+
+import 'app/data/schema.dart';
+import 'translation/translation.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -37,6 +39,9 @@ final List appLanguages = [
 ];
 
 void main() async {
+  BuildEnvironment.init(flavor: BuildFlavor.development);
+  assert(env != null);
+
   WidgetsFlutterBinding.ensureInitialized();
   await setOptimalDisplayMode();
   final String timeZoneName = await FlutterTimezone.getLocalTimezone();
@@ -50,7 +55,10 @@ void main() async {
   SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(systemNavigationBarColor: Colors.black));
   await isarInit();
-  runApp(const MyApp());
+
+  await initServices();
+
+  runApp(MyApp());
 }
 
 Future<void> setOptimalDisplayMode() async {
@@ -84,7 +92,8 @@ Future<void> isarInit() async {
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  bool debugShowCheckedModeBanner;
+  MyApp({this.debugShowCheckedModeBanner = false, Key? key}) : super(key: key);
 
   static Future<void> updateAppState(
     BuildContext context, {

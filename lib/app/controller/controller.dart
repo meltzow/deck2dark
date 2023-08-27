@@ -3,17 +3,26 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:isar/isar.dart';
+import 'package:todark/app/data/board.dart';
 import 'package:todark/app/data/schema.dart';
+import 'package:todark/app/services/Iboard_service.dart';
+import 'package:todark/app/services/Icard_service.dart';
+import 'package:todark/app/services/Istack_service.dart';
 import 'package:todark/app/services/notification.dart';
 import 'package:todark/main.dart';
 
 class TodoController extends GetxController {
   final tasks = <Tasks>[].obs;
   final todos = <Todos>[].obs;
+  final boards = <Board>[].obs;
 
   @override
   void onInit() {
     super.onInit();
+    final IBoardService _boardService = Get.find<IBoardService>();
+    final IStackService _stackService = Get.find<IStackService>();
+    final ICardService _cardService = Get.find<ICardService>();
+    _boardService.getAllBoards().then((value) => boards.assignAll(value));
     tasks.assignAll(isar.tasks.where().sortByIndex().findAllSync());
     todos.assignAll(isar.todos.where().findAllSync());
   }

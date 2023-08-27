@@ -35,6 +35,7 @@ dependencies:
   flutter_displaymode: ^0.6.0
   sleek_circular_slider: ^2.0.1
   flutter_local_notifications: ^15.1.1
+  dio: ^5.3.2
 
 dev_dependencies:
   flutter_test:
