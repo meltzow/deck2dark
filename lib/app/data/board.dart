@@ -1,6 +1,7 @@
 import 'dart:ffi';
 
 import 'package:todark/app/data/label.dart';
+import 'package:todark/app/data/schema.dart';
 
 class Board {
   final String title;
@@ -51,4 +52,6 @@ class Board {
         'color': color,
         'labels': labels?.map((e) => e.toJson()).toList()
       };
+
+  Tasks toTask() => Tasks(title: title, taskColor: 222);
 }

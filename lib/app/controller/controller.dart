@@ -22,7 +22,15 @@ class TodoController extends GetxController {
     final IBoardService _boardService = Get.find<IBoardService>();
     final IStackService _stackService = Get.find<IStackService>();
     final ICardService _cardService = Get.find<ICardService>();
-    _boardService.getAllBoards().then((value) => boards.assignAll(value));
+    _boardService.getAllBoards().then((value) async => {
+          boards.assignAll(value),
+          await isar.writeTxn(() async {
+            for (var element in value) {
+              tasks.add(element.toTask());
+              await isar.tasks.put(element.toTask());
+            }
+          })
+        });
     tasks.assignAll(isar.tasks.where().sortByIndex().findAllSync());
     todos.assignAll(isar.todos.where().findAllSync());
   }

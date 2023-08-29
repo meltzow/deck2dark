@@ -20,10 +20,10 @@ class CredentialServiceImpl extends GetxService implements ICredentialService {
   @override
   Future<Account> getAccount() async {
     return Account(
-      username: 'foobar',
-      password: 'password',
-      authData: 'dododod',
-      url: 'https://localhost:8080',
+      username: 'admin',
+      password: 'admin',
+      authData: 'Basic ${base64.encode(utf8.encode('admin:admin'))}',
+      url: 'http://192.168.178.59:8080/',
       isAuthenticated: true,
     );
   }

@@ -1,11 +1,11 @@
-import 'package:todark/app/modules/tasks/view/all_tasks.dart';
-import 'package:todark/app/modules/settings/view/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:todark/app/modules/settings/view/settings.dart';
+import 'package:todark/app/modules/tasks/view/all_tasks.dart';
 import 'package:todark/app/modules/tasks/widgets/tasks_action.dart';
-import 'package:todark/app/modules/todos/view/calendar_todos.dart';
 import 'package:todark/app/modules/todos/view/all_todos.dart';
+import 'package:todark/app/modules/todos/view/calendar_todos.dart';
 import 'package:todark/app/modules/todos/widgets/todos_action.dart';
 import 'package:todark/theme/theme_controller.dart';
 
@@ -77,16 +77,19 @@ class _HomePageState extends State<HomePage> {
                   context: context,
                   isScrollControlled: true,
                   builder: (BuildContext context) {
-                    return tabIndex == 0
-                        ? TasksAction(
-                            text: 'create'.tr,
-                            edit: false,
-                          )
-                        : TodosAction(
-                            text: 'create'.tr,
-                            edit: false,
-                            category: true,
-                          );
+                    switch (tabIndex) {
+                      case 0:
+                        return TasksAction(
+                          text: 'create'.tr,
+                          edit: false,
+                        );
+                      default:
+                        return TodosAction(
+                          text: 'create'.tr,
+                          edit: false,
+                          category: true,
+                        );
+                    }
                   },
                 );
               },
