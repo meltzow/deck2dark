@@ -16,21 +16,37 @@ class TodoController extends GetxController {
   final todos = <Todos>[].obs;
   final boards = <Board>[].obs;
 
-  @override
-  void onInit() {
-    super.onInit();
+  Future<void> refreshTasks() async {
     final IBoardService _boardService = Get.find<IBoardService>();
     final IStackService _stackService = Get.find<IStackService>();
     final ICardService _cardService = Get.find<ICardService>();
-    _boardService.getAllBoards().then((value) async => {
-          boards.assignAll(value),
-          await isar.writeTxn(() async {
-            for (var element in value) {
-              tasks.add(element.toTask());
-              await isar.tasks.put(element.toTask());
-            }
-          })
-        });
+    boards.clear();
+
+    var allBoards = await _boardService.getAllBoards();
+    boards.assignAll(allBoards);
+
+    await isar.writeTxn(() async {
+      isar.tasks.clear();
+      tasks.clear();
+      isar.todos.clear();
+      todos.clear();
+      for (var board in allBoards) {
+        tasks.add(board.toTask());
+        await isar.tasks.put(board.toTask());
+        var stacks = await _stackService.getAll(board.id);
+        for (var stack in stacks!) {
+          for (var card in stack.cards) {
+            isar.todos.put(card.toTodo(board.toTask()));
+            todos.add(card.toTodo(board.toTask()));
+          }
+        }
+      }
+    });
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
     tasks.assignAll(isar.tasks.where().sortByIndex().findAllSync());
     todos.assignAll(isar.todos.where().findAllSync());
   }
