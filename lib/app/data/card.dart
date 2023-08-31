@@ -2,6 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:todark/app/data/assignment.dart';
 import 'package:todark/app/data/attachment.dart';
 import 'package:todark/app/data/label.dart';
+import 'package:todark/app/data/schema.dart';
 import 'package:todark/app/data/user.dart';
 
 part 'card.g.dart';
@@ -42,4 +43,8 @@ class Card {
   factory Card.fromJson(Map<String, dynamic> json) => _$CardFromJson(json);
 
   Map<String, dynamic> toJson() => _$CardToJson(this);
+
+  Todos toTodo(Tasks task) {
+    return Todos(name: title)..task.value = task;
+  }
 }
