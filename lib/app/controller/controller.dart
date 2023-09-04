@@ -15,6 +15,7 @@ class TodoController extends GetxController {
   final tasks = <Tasks>[].obs;
   final todos = <Todos>[].obs;
   final boards = <Board>[].obs;
+  late Settings settings;
 
   Future<void> refreshTasks() async {
     final IBoardService _boardService = Get.find<IBoardService>();
@@ -31,13 +32,14 @@ class TodoController extends GetxController {
       isar.todos.clear();
       todos.clear();
       for (var board in allBoards) {
-        tasks.add(board.toTask());
-        await isar.tasks.put(board.toTask());
+        var task = board.toTask();
+        tasks.add(task);
+        await isar.tasks.put(task);
         var stacks = await _stackService.getAll(board.id);
         for (var stack in stacks!) {
           for (var card in stack.cards) {
-            isar.todos.put(card.toTodo(board.toTask()));
-            todos.add(card.toTodo(board.toTask()));
+            isar.todos.put(card.toTodo(task, stack, settings));
+            todos.add(card.toTodo(task, stack, settings));
           }
         }
       }
@@ -45,10 +47,11 @@ class TodoController extends GetxController {
   }
 
   @override
-  void onInit() {
+  Future<void> onInit() async {
     super.onInit();
     tasks.assignAll(isar.tasks.where().sortByIndex().findAllSync());
     todos.assignAll(isar.todos.where().findAllSync());
+    settings = await isar.settings.where().findFirst() ?? Settings();
   }
 
   // Tasks

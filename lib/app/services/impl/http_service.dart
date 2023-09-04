@@ -38,13 +38,13 @@ class HttpService extends getx.GetxService implements IHttpService {
   Future<List<dynamic>> getListResponse(String path) async {
     List<dynamic> response;
     Account? account = await credService.getAccount();
-    try {
-      Response resp = await httpClient.get(account.url + path,
-          options: Options(headers: getHeaders(path, account)));
-      response = (returnResponse(resp) as List<dynamic>);
-    } catch (error) {
-      throw Exception(error.toString());
-    }
+    // try {
+    Response resp = await httpClient.get(account.url + path,
+        options: Options(headers: getHeaders(path, account)));
+    response = (returnResponse(resp) as List<dynamic>);
+    // } catch (error) {
+    //   throw Exception(error.toString());
+    // }
     return response;
   }
 

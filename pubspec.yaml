@@ -36,6 +36,12 @@ dependencies:
   sleek_circular_slider: ^2.0.1
   flutter_local_notifications: ^15.1.1
   dio: ^5.3.2
+  catcher:
+    git:
+      url: https://github.com/Frank292/catcher.git
+      ref: master
+  firebase_crashlytics: ^3.3.5
+  firebase_analytics: ^10.4.5
 
 dev_dependencies:
   flutter_test:
@@ -59,7 +65,7 @@ flutter_native_splash:
   image: "assets/icons/icon.png"
 
 flutter:
-  generate: false
+  generate: true
   uses-material-design: true
 
   assets:
