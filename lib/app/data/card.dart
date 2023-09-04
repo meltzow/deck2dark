@@ -46,7 +46,9 @@ class Card {
   Map<String, dynamic> toJson() => _$CardToJson(this);
 
   Todos toTodo(Tasks task, Stack stack, Settings settings) {
-    var t = Todos(name: title)..task.value = task;
+    var t = Todos(name: title, description: description, id: id!)
+      ..task.value = task;
+    task.todos.add(t);
     t.done = settings.doneStates!.contains(stack.title) ? true : false;
     return t;
   }

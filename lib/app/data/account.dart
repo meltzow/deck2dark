@@ -1,4 +1,8 @@
+import 'package:isar/isar.dart';
+
+@collection
 class Account {
+  Id id = Isar.autoIncrement;
   final String username;
   final String password;
   final String authData;
