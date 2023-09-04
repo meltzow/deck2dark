@@ -1,12 +1,10 @@
-import 'dart:ffi';
-
 import 'package:todark/app/data/label.dart';
 import 'package:todark/app/data/schema.dart';
 
 class Board {
   final String title;
   final String? color;
-  final Bool? archived;
+  final bool? archived;
   final int id;
   final String? acl;
   final int? shared;
@@ -53,5 +51,5 @@ class Board {
         'labels': labels?.map((e) => e.toJson()).toList()
       };
 
-  Tasks toTask() => Tasks(title: title, taskColor: 222);
+  Tasks toTask() => Tasks(title: title, taskColor: 222, archive: archived);
 }

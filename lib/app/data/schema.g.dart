@@ -88,7 +88,7 @@ void _settingsSerialize(
   writer.writeString(offsets[1], object.language);
   writer.writeBool(offsets[2], object.materialColor);
   writer.writeBool(offsets[3], object.onboard);
-  writer.writeString(offsets[4], object.theme);
+  writer.writeBool(offsets[4], object.theme);
 }
 
 Settings _settingsDeserialize(
@@ -103,7 +103,7 @@ Settings _settingsDeserialize(
   object.language = reader.readStringOrNull(offsets[1]);
   object.materialColor = reader.readBool(offsets[2]);
   object.onboard = reader.readBool(offsets[3]);
-  object.theme = reader.readStringOrNull(offsets[4]);
+  object.theme = reader.readBoolOrNull(offsets[4]);
   return object;
 }
 
@@ -123,7 +123,7 @@ P _settingsDeserializeProp<P>(
     case 3:
       return (reader.readBool(offset)) as P;
     case 4:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readBoolOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
