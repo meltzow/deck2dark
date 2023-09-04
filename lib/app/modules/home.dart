@@ -1,5 +1,3 @@
-import 'package:todark/app/modules/tasks/view/all_tasks.dart';
-import 'package:todark/app/modules/settings/view/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
