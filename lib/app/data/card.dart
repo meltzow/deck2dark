@@ -3,6 +3,7 @@ import 'package:todark/app/data/assignment.dart';
 import 'package:todark/app/data/attachment.dart';
 import 'package:todark/app/data/label.dart';
 import 'package:todark/app/data/schema.dart';
+import 'package:todark/app/data/stack.dart';
 import 'package:todark/app/data/user.dart';
 
 part 'card.g.dart';
@@ -44,7 +45,9 @@ class Card {
 
   Map<String, dynamic> toJson() => _$CardToJson(this);
 
-  Todos toTodo(Tasks task) {
-    return Todos(name: title)..task.value = task;
+  Todos toTodo(Tasks task, Stack stack, Settings settings) {
+    var t = Todos(name: title)..task.value = task;
+    t.done = settings.doneStates!.contains(stack.title) ? true : false;
+    return t;
   }
 }
