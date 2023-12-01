@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -52,7 +53,7 @@ class TodoController extends GetxController {
 
   Future<void> updateTask(
       Tasks task, String title, String desc, Color myColor) async {
-    isar.writeTxnSync(() {
+    await isar.writeTxn(() async {
       task.title = title;
       task.description = desc;
       task.taskColor = myColor.value;
