@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:isar/isar.dart';
+import 'package:isar_crdt/isar_crdt.dart';
 import 'package:todark/app/data/schema.dart';
 import 'package:todark/app/services/notification.dart';
 import 'package:todark/main.dart';
@@ -43,7 +45,10 @@ class TodoController extends GetxController {
 
     if (searchTask.isEmpty) {
       tasks.add(taskCreate);
-      isar.writeTxnSync(() => isar.tasks.putSync(taskCreate));
+      final taskCollection = isar.collection<Tasks>();
+      await isar.writeTxn(() async {
+        return taskCollection.putChanges(taskCreate);
+      });
       EasyLoading.showSuccess('createCategory'.tr, duration: duration);
     } else {
       EasyLoading.showError('duplicateCategory'.tr, duration: duration);
@@ -52,11 +57,11 @@ class TodoController extends GetxController {
 
   Future<void> updateTask(
       Tasks task, String title, String desc, Color myColor) async {
-    isar.writeTxnSync(() {
+    await isar.writeTxn(() async {
       task.title = title;
       task.description = desc;
       task.taskColor = myColor.value;
-      isar.tasks.putSync(task);
+      return isar.tasks.putChanges(task);
     });
 
     var newTask = task;
@@ -86,14 +91,15 @@ class TodoController extends GetxController {
       }
       // Delete Todos
       todos.removeWhere((todo) => todo.task.value?.id == task.id);
-      isar.writeTxnSync(() => isar.todos
-          .filter()
-          .task((q) => q.idEqualTo(task.id))
-          .deleteAllSync());
+      await isar.writeTxn(() async {
+        isar.todos.filter().task((q) => q.idEqualTo(task.id)).deleteAllSync();
+      });
 
       // Delete Task
       tasks.remove(task);
-      isar.writeTxnSync(() => isar.tasks.deleteSync(task.id));
+      await isar.writeTxn(() async {
+        isar.tasks.delete(task.id);
+      });
       EasyLoading.showSuccess('categoryDelete'.tr, duration: duration);
     }
   }
@@ -115,9 +121,9 @@ class TodoController extends GetxController {
         }
       }
       // Archive Task
-      isar.writeTxnSync(() {
+      await isar.writeTxn(() async {
         task.archive = true;
-        isar.tasks.putSync(task);
+        return isar.tasks.putChanges(task);
       });
       tasks.refresh();
       todos.refresh();
@@ -147,9 +153,9 @@ class TodoController extends GetxController {
         }
       }
       // No archive Task
-      isar.writeTxnSync(() {
+      await isar.writeTxn(() async {
         task.archive = false;
-        isar.tasks.putSync(task);
+        return isar.tasks.putChanges(task);
       });
       tasks.refresh();
       todos.refresh();
@@ -180,9 +186,8 @@ class TodoController extends GetxController {
 
     if (getTodos.isEmpty) {
       todos.add(todosCreate);
-      isar.writeTxnSync(() {
-        isar.todos.putSync(todosCreate);
-        todosCreate.task.saveSync();
+      await isar.writeTxn(() async {
+        return isar.collection<Todos>().putChanges(todosCreate);
       });
       if (time.isNotEmpty) {
         NotificationShow().showNotification(
@@ -199,7 +204,9 @@ class TodoController extends GetxController {
   }
 
   Future<void> updateTodoCheck(Todos todo) async {
-    isar.writeTxnSync(() => isar.todos.putSync(todo));
+    await isar.writeTxn(() async {
+      return isar.todos.putChanges(todo);
+    });
     todos.refresh();
   }
 
@@ -209,13 +216,12 @@ class TodoController extends GetxController {
     if (time.isNotEmpty) {
       date = DateFormat.yMMMEd(locale.languageCode).add_Hm().parse(time);
     }
-    isar.writeTxnSync(() {
+    await isar.writeTxn(() async {
       todo.name = title;
       todo.description = desc;
       todo.todoCompletedTime = date;
       todo.task.value = task;
-      isar.todos.putSync(todo);
-      todo.task.saveSync();
+      return isar.todos.putChanges(todo);
     });
 
     var newTodo = todo;
@@ -247,7 +253,9 @@ class TodoController extends GetxController {
         }
       }
       todos.remove(todo);
-      isar.writeTxnSync(() => isar.todos.deleteSync(todo.id));
+      await isar.writeTxn(() async {
+        isar.todos.delete(todo.id);
+      });
       EasyLoading.showSuccess('todoDelete'.tr, duration: duration);
     }
   }
@@ -369,7 +377,9 @@ class TodoController extends GetxController {
             final task = Tasks.fromJson(data);
             final existingTask = tasks.firstWhereOrNull((t) => t.id == task.id);
             if (existingTask == null) tasks.add(task);
-            isar.writeTxnSync(() => isar.tasks.putSync(task));
+            await isar.writeTxn(() async {
+              return isar.tasks.putChanges(task);
+            });
             if (!taskSuccessShown) {
               EasyLoading.showSuccess('successRestoreCategory'.tr);
               taskSuccessShown = true;
@@ -391,14 +401,16 @@ class TodoController extends GetxController {
                   );
             final existingTask = tasks.firstWhereOrNull((t) => t.id == task.id);
             if (existingTask == null) tasks.add(task);
-            isar.writeTxnSync(() => isar.tasks.putSync(task));
+            await isar.writeTxn(() async {
+              return isar.tasks.putChanges(task);
+            });
             final todo = Todos.fromJson(data)..task.value = task;
             final existingTodos =
                 todos.firstWhereOrNull((t) => t.id == todo.id);
             if (existingTodos == null) todos.add(todo);
-            isar.writeTxnSync(() {
-              isar.todos.putSync(todo);
-              todo.task.saveSync();
+            await isar.writeTxn(() async {
+              todo.task.save();
+              return isar.todos.putChanges(todo);
             });
             if (todo.todoCompletedTime != null) {
               if (todo.todoCompletedTime!.isAfter(now)) {

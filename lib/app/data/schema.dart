@@ -1,4 +1,5 @@
 import 'package:isar/isar.dart';
+import 'package:isar_crdt/isar_crdt.dart';
 
 part 'schema.g.dart';
 
@@ -13,7 +14,7 @@ class Settings {
 }
 
 @collection
-class Tasks {
+class Tasks extends CrdtBaseObject {
   Id id;
   String title;
   String description;
@@ -46,16 +47,17 @@ class Tasks {
         'description': description,
         'todoCompletedTime': taskColor,
         'done': archive,
+        'sid': sid
       };
 }
 
 @collection
-class Todos {
-  Id id;
-  String name;
-  String description;
-  DateTime? todoCompletedTime;
-  bool done;
+class Todos extends CrdtBaseObject {
+  Id id = Isar.autoIncrement;
+  late String name;
+  late String description;
+  late DateTime? todoCompletedTime;
+  late bool done;
 
   final task = IsarLink<Tasks>();
 
@@ -82,5 +84,9 @@ class Todos {
         'description': description,
         'todoCompletedTime': todoCompletedTime,
         'done': done,
+        'sid': sid
       };
 }
+
+@collection
+class CrdtModel extends CrdtBaseModel {}
