@@ -1,12 +1,16 @@
+import 'package:isar/isar.dart';
 import 'package:json_annotation/json_annotation.dart';
 
+part 'label.g.dart';
+
+@collection
 @JsonSerializable()
 class Label {
   String title;
   String? color;
   int? boardId;
   int? lastModified;
-  int? id;
+  Id id;
   String? ETAG;
   int? cardId;
 

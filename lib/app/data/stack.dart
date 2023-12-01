@@ -1,11 +1,21 @@
-import 'package:todark/app/data/card.dart' as NCCard;
+import 'package:isar/isar.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:todark/app/data/card.dart';
 
+import 'label.dart';
+
+part 'stack.g.dart';
+
+@collection
+@JsonSerializable(explicitToJson: true)
 class Stack {
   final String title;
   final int? boardId;
   final int? deletedAt;
-  final List<NCCard.Card> cards;
-  final int id;
+  @ignore
+  final labels = IsarLinks<Label>();
+  final cards = IsarLinks<Card>();
+  final Id id;
 
   // final String? color;
   // final Bool? archived;
@@ -15,32 +25,9 @@ class Stack {
   // final DateTime? deletedAt;
   // final DateTime? lastModified;
 
-  Stack(
-      {required this.title,
-      this.boardId,
-      this.deletedAt,
-      required this.cards,
-      required this.id});
+  Stack({required this.title, this.boardId, this.deletedAt, required this.id});
 
-  factory Stack.fromJson(Map<String, dynamic> json) {
-    final cardsData = json['cards'] as List<dynamic>?;
-    final cards = cardsData != null
-        // map each review to a Review object
-        ? cardsData
-            .map((reviewData) => NCCard.Card.fromJson(reviewData))
-            // map() returns an Iterable so we convert it to a List
-            .toList() // use an empty list as fallback value
-        : <NCCard.Card>[];
-
-    return Stack(
-      title: json['title'] as String,
-      boardId: json['boardId'] as int?,
-      deletedAt: json['deletedAt'] as int?,
-      // cast to a nullable list as the cards may be missing
-      cards: cards,
-      id: json['id'] as int,
-    );
-  }
+  factory Stack.fromJson(Map<String, dynamic> json) => _$StackFromJson(json);
 
   Map<String, dynamic> toJson() {
     final cardsJson = cards != null

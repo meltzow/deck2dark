@@ -1,4 +1,6 @@
+import 'package:isar/isar.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:todark/app/data/account.dart';
 import 'package:todark/app/data/assignment.dart';
 import 'package:todark/app/data/attachment.dart';
 import 'package:todark/app/data/label.dart';
@@ -8,12 +10,15 @@ import 'package:todark/app/data/user.dart';
 
 part 'card.g.dart';
 
+@collection
 @JsonSerializable(explicitToJson: true)
 class Card {
   String? ETag;
   bool? archived;
+  @ignore
   List<Assignment>? assignedUsers;
   int? attachmentCount;
+  @ignore
   List<Attachment>? attachments;
   int? commentsCount;
   int? commentsUnread;
@@ -21,12 +26,14 @@ class Card {
   int? deletedAt;
   final String? description;
   String? duedate;
-  final int? id;
+  final Id id;
+  @ignore
   List<Label>? labels;
   String? lastEditor;
   int? lastModified;
   int? order;
   int? overdue;
+  @ignore
   late User? owner;
   int? stackId;
   final String title;
@@ -45,11 +52,11 @@ class Card {
 
   Map<String, dynamic> toJson() => _$CardToJson(this);
 
-  Todos toTodo(Tasks task, Stack stack, Settings settings) {
-    var t = Todos(name: title, description: description, id: id!)
+  Todos toTodo(Tasks task, Stack stack, Account account) {
+    var t = Todos(name: title, description: description!, id: id!)
       ..task.value = task;
     task.todos.add(t);
-    t.done = settings.doneStates!.contains(stack.title) ? true : false;
+    t.done = account.doneStates!.contains(stack.title) ? true : false;
     return t;
   }
 }

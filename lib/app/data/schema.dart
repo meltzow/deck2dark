@@ -10,8 +10,6 @@ class Settings {
   bool materialColor = false;
   bool amoledTheme = false;
   String? language;
-  List<String>? doingStates = ['Offen', 'In Arbeit'];
-  List<String>? doneStates = ['Erledigt'];
 }
 
 @collection

@@ -1,14 +1,19 @@
 import 'package:isar/isar.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'account.g.dart';
 
 @collection
+@JsonSerializable(explicitToJson: true)
 class Account {
   Id id = Isar.autoIncrement;
   final String username;
   final String password;
   final String authData;
   final String url;
-
   final bool isAuthenticated;
+  List<String>? doingStates = ['Offen', 'In Arbeit'];
+  List<String>? doneStates = ['Erledigt'];
 
   Account(
       {required this.username,
@@ -26,11 +31,5 @@ class Account {
         isAuthenticated: json['isAuthenticated'] as bool);
   }
 
-  Map<String, dynamic> toJson() => {
-        'username': username,
-        'password': password,
-        'authData': authData,
-        'url': url,
-        'isAuthenticated': isAuthenticated
-      };
+  Map<String, dynamic> toJson() => _$AccountToJson(this);
 }

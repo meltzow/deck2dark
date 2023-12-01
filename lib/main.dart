@@ -17,6 +17,10 @@ import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
+import 'package:todark/app/data/account.dart';
+import 'package:todark/app/data/board.dart';
+import 'package:todark/app/data/card.dart';
+import 'package:todark/app/data/label.dart';
 import 'package:todark/app/modules/home.dart';
 import 'package:todark/app/modules/onboarding.dart';
 import 'package:todark/env.dart';
@@ -138,6 +142,10 @@ Future<void> isarInit() async {
       TasksSchema,
       TodosSchema,
       SettingsSchema,
+      BoardSchema,
+      CardSchema,
+      LabelSchema,
+      AccountSchema,
     ],
     directory: (await getApplicationSupportDirectory()).path,
   );

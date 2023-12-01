@@ -1,9 +1,12 @@
-import 'package:flutter/material.dart';
+import 'dart:ui';
+
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:isar/isar.dart';
+import 'package:todark/app/data/account.dart';
 import 'package:todark/app/data/board.dart';
+import 'package:todark/app/data/card.dart';
 import 'package:todark/app/data/schema.dart';
 import 'package:todark/app/services/Iboard_service.dart';
 import 'package:todark/app/services/Icard_service.dart';
@@ -16,30 +19,40 @@ class TodoController extends GetxController {
   final todos = <Todos>[].obs;
   final boards = <Board>[].obs;
   late Settings settings;
+  late Account account;
+  final IBoardService _boardService = Get.find<IBoardService>();
+  final IStackService _stackService = Get.find<IStackService>();
+  final ICardService _cardService = Get.find<ICardService>();
 
   Future<void> refreshTasks() async {
-    final IBoardService _boardService = Get.find<IBoardService>();
-    final IStackService _stackService = Get.find<IStackService>();
-    final ICardService _cardService = Get.find<ICardService>();
     boards.clear();
 
     var allBoards = await _boardService.getAllBoards();
     boards.assignAll(allBoards);
+
+    isar.writeTxnSync(
+        () => {isar.boards.clearSync(), isar.boards.putAllSync(allBoards)});
+
+    isar.writeTxnSync(() => {isar.boards.putSync(allBoards.elementAt(1))});
 
     await isar.writeTxn(() async {
       isar.tasks.clear();
       tasks.clear();
       isar.todos.clear();
       todos.clear();
+      isar.cards.clear();
+
       for (var board in allBoards) {
         var task = board.toTask();
         tasks.add(task);
-        await isar.tasks.put(task);
+        isar.tasks.put(task);
         var stacks = await _stackService.getAll(board.id);
         for (var stack in stacks!) {
+          //FIXME
+          // isar.cards.putAll(stack.cards);
           for (var card in stack.cards) {
-            isar.todos.put(card.toTodo(task, stack, settings));
-            todos.add(card.toTodo(task, stack, settings));
+            isar.todos.put(card.toTodo(task, stack, account));
+            todos.add(card.toTodo(task, stack, account));
           }
         }
       }
@@ -52,6 +65,7 @@ class TodoController extends GetxController {
     tasks.assignAll(isar.tasks.where().sortByIndex().findAllSync());
     todos.assignAll(isar.todos.where().findAllSync());
     settings = await isar.settings.where().findFirst() ?? Settings();
+    account = (await isar.accounts.where().findFirst())!;
   }
 
   // Tasks
@@ -218,6 +232,10 @@ class TodoController extends GetxController {
           );
         }
       });
+      // isar.stacks
+      account.doingStates?.first;
+      //FIXME
+      _cardService.createCard(task.id, 11, title);
       EasyLoading.showSuccess('taskCreate'.tr,
           duration: const Duration(milliseconds: 500));
     } else {
@@ -228,6 +246,9 @@ class TodoController extends GetxController {
 
   Future<void> updateTodoCheck(Todos todo) async {
     await isar.writeTxn(() async => isar.todos.put(todo));
+    // isar,
+    // var c = NCCard.Card.fromTodo(todo);
+    // _cardService.updateCard(boardId, stackId, c.id!, c);
     todos.refresh();
   }
 

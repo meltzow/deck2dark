@@ -22,33 +22,23 @@ const SettingsSchema = CollectionSchema(
       name: r'amoledTheme',
       type: IsarType.bool,
     ),
-    r'doingStates': PropertySchema(
-      id: 1,
-      name: r'doingStates',
-      type: IsarType.stringList,
-    ),
-    r'doneStates': PropertySchema(
-      id: 2,
-      name: r'doneStates',
-      type: IsarType.stringList,
-    ),
     r'language': PropertySchema(
-      id: 3,
+      id: 1,
       name: r'language',
       type: IsarType.string,
     ),
     r'materialColor': PropertySchema(
-      id: 4,
+      id: 2,
       name: r'materialColor',
       type: IsarType.bool,
     ),
     r'onboard': PropertySchema(
-      id: 5,
+      id: 3,
       name: r'onboard',
       type: IsarType.bool,
     ),
     r'theme': PropertySchema(
-      id: 6,
+      id: 4,
       name: r'theme',
       type: IsarType.bool,
     )
@@ -74,30 +64,6 @@ int _settingsEstimateSize(
 ) {
   var bytesCount = offsets.last;
   {
-    final list = object.doingStates;
-    if (list != null) {
-      bytesCount += 3 + list.length * 3;
-      {
-        for (var i = 0; i < list.length; i++) {
-          final value = list[i];
-          bytesCount += value.length * 3;
-        }
-      }
-    }
-  }
-  {
-    final list = object.doneStates;
-    if (list != null) {
-      bytesCount += 3 + list.length * 3;
-      {
-        for (var i = 0; i < list.length; i++) {
-          final value = list[i];
-          bytesCount += value.length * 3;
-        }
-      }
-    }
-  }
-  {
     final value = object.language;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
@@ -113,12 +79,10 @@ void _settingsSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeBool(offsets[0], object.amoledTheme);
-  writer.writeStringList(offsets[1], object.doingStates);
-  writer.writeStringList(offsets[2], object.doneStates);
-  writer.writeString(offsets[3], object.language);
-  writer.writeBool(offsets[4], object.materialColor);
-  writer.writeBool(offsets[5], object.onboard);
-  writer.writeBool(offsets[6], object.theme);
+  writer.writeString(offsets[1], object.language);
+  writer.writeBool(offsets[2], object.materialColor);
+  writer.writeBool(offsets[3], object.onboard);
+  writer.writeBool(offsets[4], object.theme);
 }
 
 Settings _settingsDeserialize(
@@ -129,13 +93,11 @@ Settings _settingsDeserialize(
 ) {
   final object = Settings();
   object.amoledTheme = reader.readBool(offsets[0]);
-  object.doingStates = reader.readStringList(offsets[1]);
-  object.doneStates = reader.readStringList(offsets[2]);
   object.id = id;
-  object.language = reader.readStringOrNull(offsets[3]);
-  object.materialColor = reader.readBool(offsets[4]);
-  object.onboard = reader.readBool(offsets[5]);
-  object.theme = reader.readBoolOrNull(offsets[6]);
+  object.language = reader.readStringOrNull(offsets[1]);
+  object.materialColor = reader.readBool(offsets[2]);
+  object.onboard = reader.readBool(offsets[3]);
+  object.theme = reader.readBoolOrNull(offsets[4]);
   return object;
 }
 
@@ -149,16 +111,12 @@ P _settingsDeserializeProp<P>(
     case 0:
       return (reader.readBool(offset)) as P;
     case 1:
-      return (reader.readStringList(offset)) as P;
-    case 2:
-      return (reader.readStringList(offset)) as P;
-    case 3:
       return (reader.readStringOrNull(offset)) as P;
+    case 2:
+      return (reader.readBool(offset)) as P;
+    case 3:
+      return (reader.readBool(offset)) as P;
     case 4:
-      return (reader.readBool(offset)) as P;
-    case 5:
-      return (reader.readBool(offset)) as P;
-    case 6:
       return (reader.readBoolOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -261,488 +219,6 @@ extension SettingsQueryFilter
         property: r'amoledTheme',
         value: value,
       ));
-    });
-  }
-
-  QueryBuilder<Settings, Settings, QAfterFilterCondition> doingStatesIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'doingStates',
-      ));
-    });
-  }
-
-  QueryBuilder<Settings, Settings, QAfterFilterCondition>
-      doingStatesIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'doingStates',
-      ));
-    });
-  }
-
-  QueryBuilder<Settings, Settings, QAfterFilterCondition>
-      doingStatesElementEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'doingStates',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Settings, Settings, QAfterFilterCondition>
-      doingStatesElementGreaterThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'doingStates',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Settings, Settings, QAfterFilterCondition>
-      doingStatesElementLessThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'doingStates',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Settings, Settings, QAfterFilterCondition>
-      doingStatesElementBetween(
-    String lower,
-    String upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'doingStates',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Settings, Settings, QAfterFilterCondition>
-      doingStatesElementStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'doingStates',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Settings, Settings, QAfterFilterCondition>
-      doingStatesElementEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'doingStates',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Settings, Settings, QAfterFilterCondition>
-      doingStatesElementContains(String value, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'doingStates',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Settings, Settings, QAfterFilterCondition>
-      doingStatesElementMatches(String pattern, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'doingStates',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Settings, Settings, QAfterFilterCondition>
-      doingStatesElementIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'doingStates',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Settings, Settings, QAfterFilterCondition>
-      doingStatesElementIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'doingStates',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Settings, Settings, QAfterFilterCondition>
-      doingStatesLengthEqualTo(int length) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'doingStates',
-        length,
-        true,
-        length,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<Settings, Settings, QAfterFilterCondition> doingStatesIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'doingStates',
-        0,
-        true,
-        0,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<Settings, Settings, QAfterFilterCondition>
-      doingStatesIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'doingStates',
-        0,
-        false,
-        999999,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<Settings, Settings, QAfterFilterCondition>
-      doingStatesLengthLessThan(
-    int length, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'doingStates',
-        0,
-        true,
-        length,
-        include,
-      );
-    });
-  }
-
-  QueryBuilder<Settings, Settings, QAfterFilterCondition>
-      doingStatesLengthGreaterThan(
-    int length, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'doingStates',
-        length,
-        include,
-        999999,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<Settings, Settings, QAfterFilterCondition>
-      doingStatesLengthBetween(
-    int lower,
-    int upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'doingStates',
-        lower,
-        includeLower,
-        upper,
-        includeUpper,
-      );
-    });
-  }
-
-  QueryBuilder<Settings, Settings, QAfterFilterCondition> doneStatesIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'doneStates',
-      ));
-    });
-  }
-
-  QueryBuilder<Settings, Settings, QAfterFilterCondition>
-      doneStatesIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'doneStates',
-      ));
-    });
-  }
-
-  QueryBuilder<Settings, Settings, QAfterFilterCondition>
-      doneStatesElementEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'doneStates',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Settings, Settings, QAfterFilterCondition>
-      doneStatesElementGreaterThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'doneStates',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Settings, Settings, QAfterFilterCondition>
-      doneStatesElementLessThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'doneStates',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Settings, Settings, QAfterFilterCondition>
-      doneStatesElementBetween(
-    String lower,
-    String upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'doneStates',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Settings, Settings, QAfterFilterCondition>
-      doneStatesElementStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'doneStates',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Settings, Settings, QAfterFilterCondition>
-      doneStatesElementEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'doneStates',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Settings, Settings, QAfterFilterCondition>
-      doneStatesElementContains(String value, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'doneStates',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Settings, Settings, QAfterFilterCondition>
-      doneStatesElementMatches(String pattern, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'doneStates',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Settings, Settings, QAfterFilterCondition>
-      doneStatesElementIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'doneStates',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Settings, Settings, QAfterFilterCondition>
-      doneStatesElementIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'doneStates',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Settings, Settings, QAfterFilterCondition>
-      doneStatesLengthEqualTo(int length) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'doneStates',
-        length,
-        true,
-        length,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<Settings, Settings, QAfterFilterCondition> doneStatesIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'doneStates',
-        0,
-        true,
-        0,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<Settings, Settings, QAfterFilterCondition>
-      doneStatesIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'doneStates',
-        0,
-        false,
-        999999,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<Settings, Settings, QAfterFilterCondition>
-      doneStatesLengthLessThan(
-    int length, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'doneStates',
-        0,
-        true,
-        length,
-        include,
-      );
-    });
-  }
-
-  QueryBuilder<Settings, Settings, QAfterFilterCondition>
-      doneStatesLengthGreaterThan(
-    int length, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'doneStates',
-        length,
-        include,
-        999999,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<Settings, Settings, QAfterFilterCondition>
-      doneStatesLengthBetween(
-    int lower,
-    int upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'doneStates',
-        lower,
-        includeLower,
-        upper,
-        includeUpper,
-      );
     });
   }
 
@@ -1142,18 +618,6 @@ extension SettingsQueryWhereDistinct
     });
   }
 
-  QueryBuilder<Settings, Settings, QDistinct> distinctByDoingStates() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'doingStates');
-    });
-  }
-
-  QueryBuilder<Settings, Settings, QDistinct> distinctByDoneStates() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'doneStates');
-    });
-  }
-
   QueryBuilder<Settings, Settings, QDistinct> distinctByLanguage(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1191,19 +655,6 @@ extension SettingsQueryProperty
   QueryBuilder<Settings, bool, QQueryOperations> amoledThemeProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'amoledTheme');
-    });
-  }
-
-  QueryBuilder<Settings, List<String>?, QQueryOperations>
-      doingStatesProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'doingStates');
-    });
-  }
-
-  QueryBuilder<Settings, List<String>?, QQueryOperations> doneStatesProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'doneStates');
     });
   }
 
