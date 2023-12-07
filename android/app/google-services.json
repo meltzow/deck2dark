@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "653670049985",
+    "project_id": "deck2dark",
+    "storage_bucket": "deck2dark.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:653670049985:android:f2b82b9a25c3867ea74c40",
+        "android_client_info": {
+          "package_name": "net.meltzow.deck2dark"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "653670049985-mihmhlea46pac3ni7pq3q49gofvrhrp2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkfpoTXlWqPjoDvSyCpKtiKGJ5cyP18LA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "653670049985-mihmhlea46pac3ni7pq3q49gofvrhrp2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "653670049985-v8mg1h09sqa7vsioat67tjoulhc4ng05.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.darkTodo"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

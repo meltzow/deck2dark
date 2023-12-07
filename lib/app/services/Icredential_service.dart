@@ -1,4 +1,4 @@
-import 'package:todark/app/data/account.dart';
+import 'package:deck2dark/app/data/account.dart';
 
 abstract class ICredentialService {
   Future<Account> getAccount();

@@ -1,4 +1,4 @@
-import 'package:todark/main.dart';
+import 'package:deck2dark/main.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 

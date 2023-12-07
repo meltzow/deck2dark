@@ -3,13 +3,13 @@ import 'package:bottom_picker/resources/arrays.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:isar/isar.dart';
-import 'package:todark/app/data/schema.dart';
-import 'package:todark/app/controller/controller.dart';
-import 'package:todark/app/widgets/text_form.dart';
+import 'package:deck2dark/app/data/schema.dart';
+import 'package:deck2dark/app/controller/controller.dart';
+import 'package:deck2dark/app/widgets/text_form.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:todark/main.dart';
+import 'package:deck2dark/main.dart';
 
 class TodosAction extends StatefulWidget {
   const TodosAction({

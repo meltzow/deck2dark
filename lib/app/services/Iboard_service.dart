@@ -1,4 +1,4 @@
-import 'package:todark/app/data/board.dart';
+import 'package:deck2dark/app/data/board.dart';
 
 abstract class IBoardService {
   Future<List<Board>> getAllBoards();

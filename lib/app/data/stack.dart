@@ -1,4 +1,4 @@
-import 'package:todark/app/data/card.dart' as NCCard;
+import 'package:deck2dark/app/data/card.dart' as NCCard;
 
 class Stack {
   final String title;

@@ -1,10 +1,10 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:todark/app/data/assignment.dart';
-import 'package:todark/app/data/attachment.dart';
-import 'package:todark/app/data/label.dart';
-import 'package:todark/app/data/schema.dart';
-import 'package:todark/app/data/stack.dart';
-import 'package:todark/app/data/user.dart';
+import 'package:deck2dark/app/data/assignment.dart';
+import 'package:deck2dark/app/data/attachment.dart';
+import 'package:deck2dark/app/data/label.dart';
+import 'package:deck2dark/app/data/schema.dart';
+import 'package:deck2dark/app/data/stack.dart';
+import 'package:deck2dark/app/data/user.dart';
 
 part 'card.g.dart';
 

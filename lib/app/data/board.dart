@@ -1,5 +1,5 @@
-import 'package:todark/app/data/label.dart';
-import 'package:todark/app/data/schema.dart';
+import 'package:deck2dark/app/data/label.dart';
+import 'package:deck2dark/app/data/schema.dart';
 
 class Board {
   final String title;

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:todark/app/data/schema.dart';
-import 'package:todark/app/controller/controller.dart';
-import 'package:todark/app/services/notification.dart';
-import 'package:todark/main.dart';
+import 'package:deck2dark/app/data/schema.dart';
+import 'package:deck2dark/app/controller/controller.dart';
+import 'package:deck2dark/app/services/notification.dart';
+import 'package:deck2dark/main.dart';
 
 class TodoCard extends StatefulWidget {
   const TodoCard({

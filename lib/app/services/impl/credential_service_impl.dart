@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:get/get.dart';
-import 'package:todark/app/data/account.dart';
-import 'package:todark/app/services/Icredential_service.dart';
+import 'package:deck2dark/app/data/account.dart';
+import 'package:deck2dark/app/services/Icredential_service.dart';
 
 class CredentialServiceImpl extends GetxService implements ICredentialService {
   final String keyUser = 'user';

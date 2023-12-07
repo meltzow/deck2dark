@@ -1,18 +1,18 @@
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
-import 'package:todark/app/services/Iauth_service.dart';
-import 'package:todark/app/services/Iboard_service.dart';
-import 'package:todark/app/services/Icard_service.dart';
-import 'package:todark/app/services/Icredential_service.dart';
-import 'package:todark/app/services/Ihttp_service.dart';
-import 'package:todark/app/services/Istack_service.dart';
-import 'package:todark/app/services/impl/auth_repository_impl.dart';
-import 'package:todark/app/services/impl/board_repository_impl.dart';
-import 'package:todark/app/services/impl/card_service_impl.dart';
-import 'package:todark/app/services/impl/credential_service_impl.dart';
-import 'package:todark/app/services/impl/http_service.dart';
-import 'package:todark/app/services/impl/stack_repository_impl.dart';
+import 'package:deck2dark/app/services/Iauth_service.dart';
+import 'package:deck2dark/app/services/Iboard_service.dart';
+import 'package:deck2dark/app/services/Icard_service.dart';
+import 'package:deck2dark/app/services/Icredential_service.dart';
+import 'package:deck2dark/app/services/Ihttp_service.dart';
+import 'package:deck2dark/app/services/Istack_service.dart';
+import 'package:deck2dark/app/services/impl/auth_repository_impl.dart';
+import 'package:deck2dark/app/services/impl/board_repository_impl.dart';
+import 'package:deck2dark/app/services/impl/card_service_impl.dart';
+import 'package:deck2dark/app/services/impl/credential_service_impl.dart';
+import 'package:deck2dark/app/services/impl/http_service.dart';
+import 'package:deck2dark/app/services/impl/stack_repository_impl.dart';
 
 enum BuildFlavor { production, development, staging }
 

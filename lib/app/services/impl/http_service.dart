@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart' as getx;
-import 'package:todark/app/data/account.dart';
-import 'package:todark/app/services/Icredential_service.dart';
-import 'package:todark/app/services/Ihttp_service.dart';
-import 'package:todark/app/services/impl/retry.dart';
+import 'package:deck2dark/app/data/account.dart';
+import 'package:deck2dark/app/services/Icredential_service.dart';
+import 'package:deck2dark/app/services/Ihttp_service.dart';
+import 'package:deck2dark/app/services/impl/retry.dart';
 
 class HttpService extends getx.GetxService implements IHttpService {
   final credService = getx.Get.find<ICredentialService>();
