@@ -19,7 +19,7 @@ class Card {
   int? commentsUnread;
   int? createdAt;
   int? deletedAt;
-  final String? description;
+  final String description;
   String? duedate;
   final int? id;
   List<Label>? labels;
@@ -34,7 +34,7 @@ class Card {
 
   Card(
       {required this.title,
-      this.description,
+      this.description = '',
       required this.id,
       this.type = 'text',
       this.owner,

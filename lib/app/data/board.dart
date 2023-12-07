@@ -4,7 +4,7 @@ import 'package:todark/app/data/schema.dart';
 class Board {
   final String title;
   final String? color;
-  final bool? archived;
+  final bool archived;
   final int id;
   final String? acl;
   final int? shared;
@@ -15,7 +15,7 @@ class Board {
   Board(
       {required this.title,
       this.color,
-      this.archived,
+      this.archived = false,
       this.acl,
       this.shared,
       this.deletedAt,
