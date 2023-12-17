@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:todark/app/data/schema.dart';
-import 'package:todark/app/modules/home.dart';
-import 'package:todark/app/widgets/button.dart';
-import 'package:todark/main.dart';
+import 'package:deck2dark/app/data/schema.dart';
+import 'package:deck2dark/app/modules/home.dart';
+import 'package:deck2dark/app/widgets/button.dart';
+import 'package:deck2dark/main.dart';
 
 class OnBording extends StatefulWidget {
   const OnBording({super.key});
@@ -31,7 +31,7 @@ class _OnBordingState extends State<OnBording> {
 
   void onBoardHome() {
     settings.onboard = true;
-    isar.writeTxn(() async => isar.settings.put(settings));
+    isar.writeTxnSync(() => isar.settings.putSync(settings));
     Get.off(() => const HomePage(), transition: Transition.downToUp);
   }
 
@@ -92,9 +92,9 @@ class _OnBordingState extends State<OnBording> {
 
 class DotIndicator extends StatelessWidget {
   const DotIndicator({
-    Key? key,
+    super.key,
     this.isActive = false,
-  }) : super(key: key);
+  });
 
   final bool isActive;
 

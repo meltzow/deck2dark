@@ -11,6 +11,7 @@ class Account {
   final String password;
   final String authData;
   final String url;
+
   final bool isAuthenticated;
   List<String>? doingStates = ['Offen', 'In Arbeit'];
   List<String>? doneStates = ['Erledigt'];

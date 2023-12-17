@@ -63,12 +63,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyD2wSNBQk0f_I1S_VYrqjdfB1u0IQ9tOjM',
-    appId: '1:653670049985:ios:d88294a95432ddbea74c40',
+    appId: '1:653670049985:ios:b1b90fe0eecb55caa74c40',
     messagingSenderId: '653670049985',
     projectId: 'deck2dark',
     storageBucket: 'deck2dark.appspot.com',
-    iosClientId: '653670049985-v8mg1h09sqa7vsioat67tjoulhc4ng05.apps.googleusercontent.com',
-    iosBundleId: 'com.example.darkTodo',
+    iosBundleId: 'net.meltzow.deck2dark',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(

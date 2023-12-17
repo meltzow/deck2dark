@@ -1,6 +1,6 @@
-import 'package:todark/app/data/schema.dart';
-import 'package:todark/app/controller/controller.dart';
-import 'package:todark/app/widgets/text_form.dart';
+import 'package:deck2dark/app/data/schema.dart';
+import 'package:deck2dark/app/controller/controller.dart';
+import 'package:deck2dark/app/widgets/text_form.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -115,7 +115,7 @@ class _TasksActionState extends State<TasksAction> {
               ),
               MyTextForm(
                 elevation: 4,
-                margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 controller: titleEdit,
                 labelText: 'name'.tr,
                 type: TextInputType.text,
@@ -129,15 +129,16 @@ class _TasksActionState extends State<TasksAction> {
               ),
               MyTextForm(
                 elevation: 4,
-                margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 controller: descEdit,
                 labelText: 'description'.tr,
-                type: TextInputType.text,
+                type: TextInputType.multiline,
                 icon: const Icon(Iconsax.note_text),
+                maxLine: null,
               ),
               Card(
                 elevation: 4,
-                margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 child: ListTile(
                   splashColor: Colors.transparent,
                   onTap: () async {

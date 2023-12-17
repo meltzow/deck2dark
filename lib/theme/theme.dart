@@ -28,7 +28,7 @@ ThemeData lightTheme(Color? color, ColorScheme? colorScheme) {
           surface: baseLigth.colorScheme.background,
         )
         .harmonized(),
-    textTheme: GoogleFonts.ubuntuTextTheme(baseLigth.textTheme),
+    textTheme: GoogleFonts.getTextTheme('Ubuntu', baseLigth.textTheme),
     appBarTheme: AppBarTheme(
       backgroundColor: color,
       foregroundColor: baseLigth.colorScheme.onSurface,
@@ -54,6 +54,9 @@ ThemeData lightTheme(Color? color, ColorScheme? colorScheme) {
     ),
     navigationBarTheme: baseLigth.navigationBarTheme.copyWith(
       backgroundColor: color,
+      labelTextStyle: MaterialStateProperty.all(
+        const TextStyle(overflow: TextOverflow.ellipsis, fontSize: 12),
+      ),
     ),
     inputDecorationTheme: baseLigth.inputDecorationTheme.copyWith(
       labelStyle: MaterialStateTextStyle.resolveWith(
@@ -87,7 +90,7 @@ ThemeData darkTheme(Color? color, ColorScheme? colorScheme) {
           surface: baseDark.colorScheme.background,
         )
         .harmonized(),
-    textTheme: GoogleFonts.ubuntuTextTheme(baseDark.textTheme),
+    textTheme: GoogleFonts.getTextTheme('Ubuntu', baseDark.textTheme),
     appBarTheme: AppBarTheme(
       backgroundColor: color,
       foregroundColor: baseDark.colorScheme.onSurface,
@@ -113,6 +116,9 @@ ThemeData darkTheme(Color? color, ColorScheme? colorScheme) {
     ),
     navigationBarTheme: baseDark.navigationBarTheme.copyWith(
       backgroundColor: color,
+      labelTextStyle: MaterialStateProperty.all(
+        const TextStyle(overflow: TextOverflow.ellipsis, fontSize: 12),
+      ),
     ),
     inputDecorationTheme: baseDark.inputDecorationTheme.copyWith(
       labelStyle: MaterialStateTextStyle.resolveWith(

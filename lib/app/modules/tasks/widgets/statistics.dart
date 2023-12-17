@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
-import 'package:todark/main.dart';
+import 'package:deck2dark/main.dart';
 
 class Statistics extends StatelessWidget {
   const Statistics({
@@ -18,7 +18,7 @@ class Statistics extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 20),
         child: Row(
@@ -29,7 +29,7 @@ class Statistics extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'taskCompleted'.tr,
+                    'todoCompleted'.tr,
                     style: context.textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.w600,
                       fontSize: 20,

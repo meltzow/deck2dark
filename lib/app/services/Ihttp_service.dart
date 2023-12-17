@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:todark/app/services/impl/retry.dart';
+import 'package:deck2dark/app/services/impl/retry.dart';
 
 abstract class IHttpService {
   Future<Map<String, dynamic>> get(String path);

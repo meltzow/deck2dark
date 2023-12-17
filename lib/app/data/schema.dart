@@ -6,10 +6,12 @@ part 'schema.g.dart';
 class Settings {
   Id id = Isar.autoIncrement;
   bool onboard = false;
-  bool? theme;
-  bool materialColor = false;
+  String? theme = 'system';
+  bool materialColor = true;
   bool amoledTheme = false;
   String? language;
+  List<String>? doingStates = ['Offen', 'In Arbeit'];
+  List<String>? doneStates = ['Erledigt'];
 }
 
 @collection
@@ -71,7 +73,9 @@ class Todos {
       : id = json['id'],
         name = json['name'],
         description = json['description'] ?? '',
-        todoCompletedTime = json['todoCompletedTime'],
+        todoCompletedTime = json['todoCompletedTime'] != null
+            ? DateTime.fromMicrosecondsSinceEpoch(json['todoCompletedTime'])
+            : json['todoCompletedTime'],
         done = json['done'] ?? false;
 
   Map<String, dynamic> toJson() => {

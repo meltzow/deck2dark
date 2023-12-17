@@ -3,13 +3,13 @@ import 'package:bottom_picker/resources/arrays.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:isar/isar.dart';
-import 'package:todark/app/data/schema.dart';
-import 'package:todark/app/controller/controller.dart';
-import 'package:todark/app/widgets/text_form.dart';
+import 'package:deck2dark/app/data/schema.dart';
+import 'package:deck2dark/app/controller/controller.dart';
+import 'package:deck2dark/app/widgets/text_form.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:todark/main.dart';
+import 'package:deck2dark/main.dart';
 
 class TodosAction extends StatefulWidget {
   const TodosAction({
@@ -59,9 +59,8 @@ class _TodosActionState extends State<TodosAction> {
   }
 
   Future<List<Tasks>> getTodosAll(String pattern) async {
-    final todosCollection = isar.tasks;
     List<Tasks> getTask;
-    getTask = await todosCollection.filter().archiveEqualTo(false).findAll();
+    getTask = isar.tasks.filter().archiveEqualTo(false).findAllSync();
     return getTask.where((element) {
       final title = element.title.toLowerCase();
       final query = pattern.toLowerCase();
@@ -166,7 +165,7 @@ class _TodosActionState extends State<TodosAction> {
                         return MyTextForm(
                           elevation: 4,
                           margin: const EdgeInsets.symmetric(
-                              horizontal: 15, vertical: 5),
+                              horizontal: 10, vertical: 5),
                           onChanged: (value) => setState(() {}),
                           controller: textConroller,
                           focusNode: focusNode,
@@ -209,7 +208,7 @@ class _TodosActionState extends State<TodosAction> {
                           AutocompleteOnSelected<Tasks> onSelected,
                           Iterable<Tasks> options) {
                         return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
                           child: Align(
                             alignment: Alignment.topCenter,
                             child: Material(
@@ -248,10 +247,10 @@ class _TodosActionState extends State<TodosAction> {
                   : Container(),
               MyTextForm(
                 elevation: 4,
-                margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 controller: titleEdit,
                 labelText: 'name'.tr,
-                type: TextInputType.text,
+                type: TextInputType.multiline,
                 icon: const Icon(Iconsax.edit_2),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -259,18 +258,20 @@ class _TodosActionState extends State<TodosAction> {
                   }
                   return null;
                 },
+                maxLine: null,
               ),
               MyTextForm(
                 elevation: 4,
-                margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 controller: descEdit,
                 labelText: 'description'.tr,
-                type: TextInputType.text,
+                type: TextInputType.multiline,
                 icon: const Icon(Iconsax.note_text),
+                maxLine: null,
               ),
               MyTextForm(
                 elevation: 4,
-                margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 onChanged: (value) => setState(() {}),
                 readOnly: true,
                 controller: timeEdit,
@@ -291,6 +292,7 @@ class _TodosActionState extends State<TodosAction> {
                     : null,
                 onTap: () {
                   BottomPicker.dateTime(
+                    titlePadding: const EdgeInsets.only(top: 10),
                     title: 'time'.tr,
                     description: 'timeDesc'.tr,
                     titleStyle: context.textTheme.titleMedium!,

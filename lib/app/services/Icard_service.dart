@@ -1,4 +1,4 @@
-import 'package:todark/app/data/card.dart';
+import 'package:deck2dark/app/data/card.dart';
 
 abstract class ICardService {
   Future<Card> createCard(int boardId, int stackId, String title);

@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
-import 'package:todark/app/services/Iauth_service.dart';
-import 'package:todark/app/services/Icredential_service.dart';
-import 'package:todark/app/services/Ihttp_service.dart';
+import 'package:deck2dark/app/services/Iauth_service.dart';
+import 'package:deck2dark/app/services/Icredential_service.dart';
+import 'package:deck2dark/app/services/Ihttp_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AuthRepositoryImpl extends GetxService implements IAuthService {

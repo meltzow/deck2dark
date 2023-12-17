@@ -1,19 +1,13 @@
-import 'dart:convert';
-import 'dart:io';
-import 'package:device_info_plus/device_info_plus.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:intl/intl.dart';
-import 'package:isar/isar.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:todark/app/data/schema.dart';
-import 'package:todark/app/modules/settings/widgets/settings_card.dart';
-import 'package:todark/main.dart';
-import 'package:todark/theme/theme_controller.dart';
+import 'package:deck2dark/app/controller/controller.dart';
+import 'package:deck2dark/app/data/schema.dart';
+import 'package:deck2dark/app/modules/settings/widgets/settings_card.dart';
+import 'package:deck2dark/main.dart';
+import 'package:deck2dark/theme/theme_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -24,8 +18,7 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-  late AndroidDeviceInfo androidInfo;
+  final todoController = Get.put(TodoController());
   final themeController = Get.put(ThemeController());
   String? appVersion;
 
@@ -34,12 +27,11 @@ class _SettingsPageState extends State<SettingsPage> {
     setState(() {
       appVersion = packageInfo.version;
     });
-    androidInfo = await deviceInfo.androidInfo;
   }
 
   updateLanguage(Locale locale) {
     settings.language = '$locale';
-    isar.writeTxn(() async => isar.settings.put(settings));
+    isar.writeTxnSync(() => isar.settings.putSync(settings));
     Get.updateLocale(locale);
     Get.back();
   }
@@ -48,111 +40,6 @@ class _SettingsPageState extends State<SettingsPage> {
   void initState() {
     infoVersion();
     super.initState();
-  }
-
-  void check(Function fun) async {
-    try {
-      var statusManageExternalStorage =
-          await Permission.manageExternalStorage.request();
-
-      if (statusManageExternalStorage.isGranted &&
-          androidInfo.version.sdkInt > 29) {
-        fun();
-      } else if (androidInfo.version.sdkInt < 30) {
-        fun();
-      }
-    } catch (e) {
-      EasyLoading.showError('error'.tr);
-      return Future.error(e);
-    }
-  }
-
-  void backup() async {
-    final dlPath = await FilePicker.platform.getDirectoryPath();
-
-    if (dlPath == null) {
-      EasyLoading.showInfo('errorPath'.tr);
-      return;
-    } else {
-      try {
-        final timeStamp = DateFormat('yyyyMMdd_HHmmss').format(DateTime.now());
-
-        final taskFileName = 'task_$timeStamp.json';
-        final todoFileName = 'todo_$timeStamp.json';
-
-        final fileTask = File('$dlPath/$taskFileName');
-        final fileTodo = File('$dlPath/$todoFileName');
-
-        final task = await isar.tasks.where().exportJson();
-        final todo = await isar.todos.where().exportJson();
-
-        await fileTask.writeAsString(jsonEncode(task));
-        await fileTodo.writeAsString(jsonEncode(todo));
-        EasyLoading.showSuccess('successBackup'.tr);
-      } catch (e) {
-        EasyLoading.showError('error'.tr);
-        return Future.error(e);
-      }
-    }
-  }
-
-  void restore() async {
-    final result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['json'],
-      allowMultiple: true,
-    );
-    if (result == null) {
-      EasyLoading.showInfo('errorPathRe'.tr);
-      return;
-    }
-
-    for (final files in result.files) {
-      final name = files.name.substring(0, 4);
-      final file = File(files.path!);
-      final jsonString = await file.readAsString();
-      final dataList = jsonDecode(jsonString);
-
-      for (final data in dataList) {
-        await isar.writeTxn(() async {
-          if (name == 'task') {
-            try {
-              final task = Tasks.fromJson(data);
-              await isar.tasks.put(task);
-              EasyLoading.showSuccess('successRestoreTask'.tr);
-            } catch (e) {
-              EasyLoading.showError('error'.tr);
-              return Future.error(e);
-            }
-          } else if (name == 'todo') {
-            try {
-              final taskCollection = isar.tasks;
-              final searchTask = await taskCollection
-                  .filter()
-                  .titleEqualTo('titleRe'.tr)
-                  .findAll();
-              final task = searchTask.isNotEmpty
-                  ? searchTask.first
-                  : Tasks(
-                      title: 'titleRe'.tr,
-                      description: 'descriptionRe'.tr,
-                      taskColor: 4284513675,
-                    );
-              await isar.tasks.put(task);
-              final todo = Todos.fromJson(data)..task.value = task;
-              await isar.todos.put(todo);
-              await todo.task.save();
-              EasyLoading.showSuccess('successRestoreTodo'.tr);
-            } catch (e) {
-              EasyLoading.showError('error'.tr);
-              return Future.error(e);
-            }
-          } else {
-            EasyLoading.showInfo('errorFile'.tr);
-          }
-        });
-      }
-    }
   }
 
   @override
@@ -198,18 +85,28 @@ class _SettingsPageState extends State<SettingsPage> {
                                 elevation: 4,
                                 icon: const Icon(Iconsax.moon),
                                 text: 'theme'.tr,
-                                switcher: true,
-                                value: Get.isDarkMode,
-                                onChange: (_) {
-                                  if (Get.isDarkMode) {
-                                    themeController
-                                        .changeThemeMode(ThemeMode.light);
-                                    themeController.saveTheme(false);
-                                  } else {
-                                    themeController
-                                        .changeThemeMode(ThemeMode.dark);
-                                    themeController.saveTheme(true);
-                                  }
+                                dropdown: true,
+                                dropdownName: settings.theme?.tr,
+                                dropdownList: <String>[
+                                  'system'.tr,
+                                  'dark'.tr,
+                                  'light'.tr
+                                ],
+                                dropdownCange: (String? newValue) {
+                                  ThemeMode themeMode =
+                                      newValue?.tr == 'system'.tr
+                                          ? ThemeMode.system
+                                          : newValue?.tr == 'dark'.tr
+                                              ? ThemeMode.dark
+                                              : ThemeMode.light;
+                                  String theme = newValue?.tr == 'system'.tr
+                                      ? 'system'
+                                      : newValue?.tr == 'dark'.tr
+                                          ? 'dark'
+                                          : 'light';
+                                  themeController.saveTheme(theme);
+                                  themeController.changeThemeMode(themeMode);
+                                  setState(() {});
                                 },
                               ),
                               SettingCard(
@@ -274,24 +171,22 @@ class _SettingsPageState extends State<SettingsPage> {
                                 elevation: 4,
                                 icon: const Icon(Iconsax.cloud_plus),
                                 text: 'backup'.tr,
-                                onPressed: () async {
-                                  check(backup);
-                                },
+                                onPressed: todoController.backup,
                               ),
                               SettingCard(
                                 elevation: 4,
                                 icon: const Icon(Iconsax.cloud_add),
                                 text: 'restore'.tr,
-                                onPressed: () async {
-                                  check(restore);
-                                },
+                                onPressed: todoController.restore,
                               ),
                               SettingCard(
                                 elevation: 4,
                                 icon: const Icon(Iconsax.cloud_minus),
                                 text: 'deleteAllBD'.tr,
-                                onPressed: () => Get.dialog(
-                                  AlertDialog(
+                                onPressed: () => showAdaptiveDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      AlertDialog.adaptive(
                                     title: Text(
                                       'deleteAllBDTitle'.tr,
                                       style: context.textTheme.titleLarge,
@@ -310,10 +205,12 @@ class _SettingsPageState extends State<SettingsPage> {
                                                       color:
                                                           Colors.blueAccent))),
                                       TextButton(
-                                          onPressed: () async {
-                                            await isar.writeTxn(() async {
-                                              await isar.todos.clear();
-                                              await isar.tasks.clear();
+                                          onPressed: () {
+                                            isar.writeTxnSync(() {
+                                              isar.todos.clearSync();
+                                              isar.tasks.clearSync();
+                                              todoController.tasks.clear();
+                                              todoController.todos.clear();
                                             });
                                             EasyLoading.showSuccess(
                                                 'deleteAll'.tr);
@@ -374,12 +271,13 @@ class _SettingsPageState extends State<SettingsPage> {
                                   elevation: 4,
                                   margin: const EdgeInsets.symmetric(
                                       horizontal: 15, vertical: 5),
-                                  child: TextButton(
-                                    child: Text(
+                                  child: ListTile(
+                                    title: Text(
                                       appLanguages[index]['name'],
                                       style: context.textTheme.labelLarge,
+                                      textAlign: TextAlign.center,
                                     ),
-                                    onPressed: () {
+                                    onTap: () {
                                       MyApp.updateAppState(context,
                                           newLocale: appLanguages[index]
                                               ['locale']);
@@ -398,6 +296,86 @@ class _SettingsPageState extends State<SettingsPage> {
                   },
                 );
               },
+            ),
+            SettingCard(
+              icon: const Icon(Iconsax.dollar_square),
+              text: 'support'.tr,
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return StatefulBuilder(
+                      builder: (BuildContext context, setState) {
+                        return SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 15),
+                                child: Text(
+                                  'support'.tr,
+                                  style: context.textTheme.titleLarge?.copyWith(
+                                    fontSize: 20,
+                                  ),
+                                ),
+                              ),
+                              SettingCard(
+                                elevation: 4,
+                                icon: const Icon(Iconsax.card),
+                                text: 'DonationAlerts',
+                                onPressed: () async {
+                                  final Uri url = Uri.parse(
+                                      'https://www.donationalerts.com/r/darkmoonight');
+                                  if (!await launchUrl(url,
+                                      mode: LaunchMode.externalApplication)) {
+                                    throw Exception('Could not launch $url');
+                                  }
+                                },
+                              ),
+                              SettingCard(
+                                elevation: 4,
+                                icon: const Icon(Iconsax.wallet),
+                                text: 'ЮMoney',
+                                onPressed: () async {
+                                  final Uri url = Uri.parse(
+                                      'https://yoomoney.ru/to/4100117672775961');
+                                  if (!await launchUrl(url,
+                                      mode: LaunchMode.externalApplication)) {
+                                    throw Exception('Could not launch $url');
+                                  }
+                                },
+                              ),
+                              const SizedBox(height: 10),
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  },
+                );
+              },
+            ),
+            SettingCard(
+              icon: const Icon(Iconsax.document),
+              text: 'license'.tr,
+              onPressed: () => Get.to(
+                LicensePage(
+                  applicationIcon: Container(
+                    width: 100,
+                    height: 100,
+                    margin: const EdgeInsets.symmetric(vertical: 5),
+                    decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                        image: DecorationImage(
+                            image: AssetImage('assets/icons/icon.png'))),
+                  ),
+                  applicationName: 'ToDark',
+                  applicationVersion: appVersion,
+                ),
+                transition: Transition.downToUp,
+              ),
             ),
             SettingCard(
               icon: const Icon(Iconsax.hierarchy_square_2),
