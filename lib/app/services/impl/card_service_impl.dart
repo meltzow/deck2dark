@@ -1,7 +1,7 @@
-import 'package:get/get.dart';
 import 'package:deck2dark/app/data/card.dart';
 import 'package:deck2dark/app/services/Icard_service.dart';
 import 'package:deck2dark/app/services/Ihttp_service.dart';
+import 'package:get/get.dart';
 
 class CardServiceImpl extends GetxService implements ICardService {
   final httpService = Get.find<IHttpService>();

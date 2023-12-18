@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:deck2dark/app/data/schema.dart';
 import 'package:deck2dark/app/modules/home.dart';
 import 'package:deck2dark/app/widgets/button.dart';
 import 'package:deck2dark/main.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class OnBording extends StatefulWidget {
   const OnBording({super.key});

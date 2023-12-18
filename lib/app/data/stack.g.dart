@@ -39,14 +39,7 @@ const StackSchema = CollectionSchema(
   deserializeProp: _stackDeserializeProp,
   idName: r'id',
   indexes: {},
-  links: {
-    r'cards': LinkSchema(
-      id: 5126945467338028021,
-      name: r'cards',
-      target: r'Card',
-      single: false,
-    )
-  },
+  links: {},
   embeddedSchemas: {},
   getId: _stackGetId,
   getLinks: _stackGetLinks,
@@ -113,12 +106,10 @@ Id _stackGetId(Stack object) {
 }
 
 List<IsarLinkBase<dynamic>> _stackGetLinks(Stack object) {
-  return [object.cards];
+  return [];
 }
 
-void _stackAttach(IsarCollection<dynamic> col, Id id, Stack object) {
-  object.cards.attach(col, col.isar.collection<Card>(), r'cards', id);
-}
+void _stackAttach(IsarCollection<dynamic> col, Id id, Stack object) {}
 
 extension StackQueryWhereSort on QueryBuilder<Stack, Stack, QWhere> {
   QueryBuilder<Stack, Stack, QAfterWhere> anyId() {
@@ -516,62 +507,7 @@ extension StackQueryFilter on QueryBuilder<Stack, Stack, QFilterCondition> {
 
 extension StackQueryObject on QueryBuilder<Stack, Stack, QFilterCondition> {}
 
-extension StackQueryLinks on QueryBuilder<Stack, Stack, QFilterCondition> {
-  QueryBuilder<Stack, Stack, QAfterFilterCondition> cards(FilterQuery<Card> q) {
-    return QueryBuilder.apply(this, (query) {
-      return query.link(q, r'cards');
-    });
-  }
-
-  QueryBuilder<Stack, Stack, QAfterFilterCondition> cardsLengthEqualTo(
-      int length) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'cards', length, true, length, true);
-    });
-  }
-
-  QueryBuilder<Stack, Stack, QAfterFilterCondition> cardsIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'cards', 0, true, 0, true);
-    });
-  }
-
-  QueryBuilder<Stack, Stack, QAfterFilterCondition> cardsIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'cards', 0, false, 999999, true);
-    });
-  }
-
-  QueryBuilder<Stack, Stack, QAfterFilterCondition> cardsLengthLessThan(
-    int length, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'cards', 0, true, length, include);
-    });
-  }
-
-  QueryBuilder<Stack, Stack, QAfterFilterCondition> cardsLengthGreaterThan(
-    int length, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'cards', length, include, 999999, true);
-    });
-  }
-
-  QueryBuilder<Stack, Stack, QAfterFilterCondition> cardsLengthBetween(
-    int lower,
-    int upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(
-          r'cards', lower, includeLower, upper, includeUpper);
-    });
-  }
-}
+extension StackQueryLinks on QueryBuilder<Stack, Stack, QFilterCondition> {}
 
 extension StackQuerySortBy on QueryBuilder<Stack, Stack, QSortBy> {
   QueryBuilder<Stack, Stack, QAfterSortBy> sortByBoardId() {

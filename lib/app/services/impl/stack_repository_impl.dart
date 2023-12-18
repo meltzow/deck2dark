@@ -1,7 +1,7 @@
-import 'package:get/get.dart';
 import 'package:deck2dark/app/data/stack.dart';
 import 'package:deck2dark/app/services/Ihttp_service.dart';
 import 'package:deck2dark/app/services/Istack_service.dart';
+import 'package:get/get.dart';
 
 class StackRepositoryImpl extends GetxService implements IStackService {
   IHttpService get httpService => Get.find<IHttpService>();

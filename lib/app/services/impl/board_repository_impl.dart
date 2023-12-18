@@ -1,7 +1,7 @@
-import 'package:get/get.dart';
 import 'package:deck2dark/app/data/board.dart';
 import 'package:deck2dark/app/services/Iboard_service.dart';
 import 'package:deck2dark/app/services/Ihttp_service.dart';
+import 'package:get/get.dart';
 
 class BoardRepositoryImpl extends GetxService implements IBoardService {
   final httpService = Get.find<IHttpService>();

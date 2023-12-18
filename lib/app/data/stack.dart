@@ -1,6 +1,6 @@
+import 'package:deck2dark/app/data/card.dart';
 import 'package:isar/isar.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:todark/app/data/card.dart';
 
 import 'label.dart';
 
@@ -14,6 +14,7 @@ class Stack {
   final int? deletedAt;
   @ignore
   final labels = IsarLinks<Label>();
+  @ignore
   final cards = IsarLinks<Card>();
   final Id id;
 

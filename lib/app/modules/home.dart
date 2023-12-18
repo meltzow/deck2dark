@@ -1,8 +1,4 @@
-import 'package:todark/app/modules/tasks/view/all_tasks.dart';
-import 'package:todark/app/modules/settings/view/settings.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
+import 'package:deck2dark/app/controller/controller.dart';
 import 'package:deck2dark/app/modules/settings/view/settings.dart';
 import 'package:deck2dark/app/modules/tasks/view/all_tasks.dart';
 import 'package:deck2dark/app/modules/tasks/widgets/tasks_action.dart';
@@ -10,6 +6,9 @@ import 'package:deck2dark/app/modules/todos/view/all_todos.dart';
 import 'package:deck2dark/app/modules/todos/view/calendar_todos.dart';
 import 'package:deck2dark/app/modules/todos/widgets/todos_action.dart';
 import 'package:deck2dark/theme/theme_controller.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

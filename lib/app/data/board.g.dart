@@ -1222,6 +1222,9 @@ Board _$BoardFromJson(Map<String, dynamic> json) => Board(
           ? null
           : DateTime.parse(json['lastModified'] as String),
       id: json['id'] as int,
+      labels: (json['labels'] as List<dynamic>?)
+          ?.map((e) => Label.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$BoardToJson(Board instance) => <String, dynamic>{
@@ -1233,4 +1236,5 @@ Map<String, dynamic> _$BoardToJson(Board instance) => <String, dynamic>{
       'shared': instance.shared,
       'deletedAt': instance.deletedAt?.toIso8601String(),
       'lastModified': instance.lastModified?.toIso8601String(),
+      'labels': instance.labels?.map((e) => e.toJson()).toList(),
     };

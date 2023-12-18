@@ -1,6 +1,3 @@
-import 'package:dio/dio.dart';
-import 'package:get/get.dart';
-import 'package:meta/meta.dart';
 import 'package:deck2dark/app/services/Iauth_service.dart';
 import 'package:deck2dark/app/services/Iboard_service.dart';
 import 'package:deck2dark/app/services/Icard_service.dart';
@@ -13,6 +10,9 @@ import 'package:deck2dark/app/services/impl/card_service_impl.dart';
 import 'package:deck2dark/app/services/impl/credential_service_impl.dart';
 import 'package:deck2dark/app/services/impl/http_service.dart';
 import 'package:deck2dark/app/services/impl/stack_repository_impl.dart';
+import 'package:dio/dio.dart';
+import 'package:get/get.dart';
+import 'package:meta/meta.dart';
 
 enum BuildFlavor { production, development, staging }
 

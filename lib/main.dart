@@ -1,20 +1,33 @@
+import 'dart:io';
+import 'dart:ui';
+
+import 'package:deck2dark/app/data/account.dart';
+import 'package:deck2dark/app/data/board.dart';
+import 'package:deck2dark/app/data/card.dart';
+import 'package:deck2dark/app/data/label.dart';
+import 'package:deck2dark/app/modules/home.dart';
+import 'package:deck2dark/app/modules/onboarding.dart';
+import 'package:deck2dark/env.dart';
+import 'package:deck2dark/firebase_options.dart';
+import 'package:deck2dark/theme/theme.dart';
+import 'package:deck2dark/theme/theme_controller.dart';
 import 'package:dynamic_color/dynamic_color.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:get/get.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:time_machine/time_machine.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
-import 'package:deck2dark/app/modules/home.dart';
-import 'package:deck2dark/app/modules/onboarding.dart';
-import 'package:deck2dark/theme/theme.dart';
-import 'package:deck2dark/theme/theme_controller.dart';
 
 import 'app/data/schema.dart';
 import 'translation/translation.dart';
@@ -41,6 +54,9 @@ final List appLanguages = [
 ];
 
 void main() async {
+  BuildEnvironment.init(flavor: BuildFlavor.development);
+  assert(env != null);
+
   final String timeZoneName;
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -58,7 +74,6 @@ void main() async {
   };
   FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
-
   SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(systemNavigationBarColor: Colors.black));
   if (Platform.isAndroid) {
@@ -71,18 +86,20 @@ void main() async {
   }
   tz.initializeTimeZones();
   tz.setLocalLocation(tz.getLocation(timeZoneName));
-  const DarwinInitializationSettings initializationSettingsIos = DarwinInitializationSettings();
+  const DarwinInitializationSettings initializationSettingsIos =
+      DarwinInitializationSettings();
   const AndroidInitializationSettings initializationSettingsAndroid =
       AndroidInitializationSettings('@mipmap/ic_launcher');
   const LinuxInitializationSettings initializationSettingsLinux =
       LinuxInitializationSettings(defaultActionName: 'ToDark');
   const InitializationSettings initializationSettings = InitializationSettings(
-    android: initializationSettingsAndroid,
-    linux: initializationSettingsLinux,
-    iOS: initializationSettingsIos
-  );
+      android: initializationSettingsAndroid,
+      linux: initializationSettingsLinux,
+      iOS: initializationSettingsIos);
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
   await isarInit();
+
+  await initServices();
   runApp(const MyApp());
 }
 

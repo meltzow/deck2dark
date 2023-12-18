@@ -1,5 +1,5 @@
-import 'package:json_annotation/json_annotation.dart';
 import 'package:deck2dark/app/data/user.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 part 'assignment.g.dart';
 

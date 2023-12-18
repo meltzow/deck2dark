@@ -1,15 +1,22 @@
 import 'package:deck2dark/app/data/label.dart';
 import 'package:deck2dark/app/data/schema.dart';
+import 'package:isar/isar.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'board.g.dart';
+
+@collection
+@JsonSerializable(explicitToJson: true)
 class Board {
   final String title;
   final String? color;
   final bool archived;
-  final int id;
+  final Id id;
   final String? acl;
   final int? shared;
   final DateTime? deletedAt;
   final DateTime? lastModified;
+  @ignore
   List<Label>? labels;
 
   Board(
