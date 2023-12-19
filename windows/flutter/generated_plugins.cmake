@@ -3,7 +3,6 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-  catcher
   dynamic_color
   firebase_core
   isar_flutter_libs

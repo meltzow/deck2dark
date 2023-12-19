@@ -37,10 +37,6 @@ dependencies:
   sleek_circular_slider: ^2.0.1
   flutter_local_notifications: ^16.2.0
   dio: ^5.3.2
-  catcher:
-    git:
-      url: https://github.com/Frank292/catcher.git
-      ref: master
   firebase_crashlytics: ^3.4.7
   firebase_analytics: ^10.7.3
   json_annotation: ^4.8.1

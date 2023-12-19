@@ -76,8 +76,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '653670049985',
     projectId: 'deck2dark',
     storageBucket: 'deck2dark.appspot.com',
-    iosClientId:
-        '653670049985-v8mg1h09sqa7vsioat67tjoulhc4ng05.apps.googleusercontent.com',
+    iosClientId: '653670049985-v8mg1h09sqa7vsioat67tjoulhc4ng05.apps.googleusercontent.com',
     iosBundleId: 'com.example.darkTodo',
   );
 }
