@@ -1,8 +1,8 @@
+import 'package:deck2dark/app/controller/controller.dart';
+import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
-import 'package:deck2dark/app/controller/controller.dart';
-import 'package:deck2dark/app/data/schema.dart';
 
 class TaskCard extends StatefulWidget {
   const TaskCard({
@@ -14,7 +14,7 @@ class TaskCard extends StatefulWidget {
     required this.onLongPress,
     required this.onTap,
   });
-  final Tasks task;
+  final Calendar task;
   final int createdTodos;
   final int completedTodos;
   final String precent;
@@ -66,7 +66,7 @@ class _TaskCardState extends State<TaskCard> {
                   ),
                 ),
                 customColors: CustomSliderColors(
-                  progressBarColor: Color(widget.task.taskColor),
+                  progressBarColor: Color(widget.task.color!),
                   trackColor: Colors.grey.shade300,
                 ),
                 customWidths: CustomSliderWidths(
@@ -83,15 +83,15 @@ class _TaskCardState extends State<TaskCard> {
             ),
           ),
           title: Text(
-            widget.task.title,
+            widget.task!.name!,
             style: context.textTheme.titleLarge?.copyWith(
               fontSize: 18,
               fontWeight: FontWeight.w600,
             ),
           ),
-          subtitle: widget.task.description.isNotEmpty
+          subtitle: widget.task.name!.isNotEmpty
               ? Text(
-                  widget.task.description,
+                  widget.task.name!,
                   style: context.textTheme.labelLarge?.copyWith(
                     color: Colors.grey,
                     fontSize: 14,

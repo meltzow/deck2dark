@@ -3,15 +3,16 @@ import 'dart:io';
 
 import 'package:deck2dark/app/data/account.dart';
 import 'package:deck2dark/app/data/board.dart';
-import 'package:deck2dark/app/data/card.dart';
 import 'package:deck2dark/app/data/schema.dart';
 import 'package:deck2dark/app/services/Iboard_service.dart';
 import 'package:deck2dark/app/services/Icard_service.dart';
 import 'package:deck2dark/app/services/Istack_service.dart';
 import 'package:deck2dark/app/services/notification.dart';
 import 'package:deck2dark/main.dart';
+import 'package:device_calendar/device_calendar.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -26,40 +27,48 @@ class TodoController extends GetxController {
   final IBoardService _boardService = Get.find<IBoardService>();
   final IStackService _stackService = Get.find<IStackService>();
   final ICardService _cardService = Get.find<ICardService>();
+  late DeviceCalendarPlugin _deviceCalendarPlugin;
+  final _calendars = <Calendar>[].obs;
+  List<Calendar> get writableCalendars =>
+      _calendars.where((c) => c.isReadOnly == false).toList();
+
+  List<Calendar> get _readOnlyCalendars =>
+      _calendars.where((c) => c.isReadOnly == true).toList();
 
   Future<void> refreshTasks() async {
-    boards.clear();
-
-    var allBoards = await _boardService.getAllBoards();
-    boards.assignAll(allBoards);
-
-    isar.writeTxnSync(
-        () => {isar.boards.clearSync(), isar.boards.putAllSync(allBoards)});
-
-    isar.writeTxnSync(() => {isar.boards.putSync(allBoards.elementAt(1))});
-
-    await isar.writeTxn(() async {
-      isar.tasks.clear();
-      tasks.clear();
-      isar.todos.clear();
-      todos.clear();
-      isar.cards.clear();
-
-      for (var board in allBoards) {
-        var task = board.toTask();
-        tasks.add(task);
-        isar.tasks.put(task);
-        var stacks = await _stackService.getAll(board.id);
-        for (var stack in stacks!) {
-          //FIXME
-          // isar.cards.putAll(stack.cards);
-          for (var card in stack.cards) {
-            isar.todos.put(card.toTodo(task, stack, account));
-            todos.add(card.toTodo(task, stack, account));
-          }
-        }
-      }
-    });
+    _retrieveCalendars();
+    // boards.clear();
+    //
+    // var allBoards = await _boardService.getAllBoards();
+    // boards.assignAll(allBoards);
+    //
+    // isar.writeTxnSync(
+    //     () => {isar.boards.clearSync(), isar.boards.putAllSync(allBoards)});
+    //
+    // isar.writeTxnSync(() => {isar.boards.putSync(allBoards.elementAt(1))});
+    //
+    // await isar.writeTxn(() async {
+    //   isar.tasks.clear();
+    //   tasks.clear();
+    //   isar.todos.clear();
+    //   todos.clear();
+    //   isar.cards.clear();
+    //
+    //   for (var board in allBoards) {
+    //     var task = board.toTask();
+    //     tasks.add(task);
+    //     isar.tasks.put(task);
+    //     var stacks = await _stackService.getAll(board.id);
+    //     for (var stack in stacks!) {
+    //       //FIXME
+    //       // isar.cards.putAll(stack.cards);
+    //       for (var card in stack.cards) {
+    //         isar.todos.put(card.toTodo(task, stack, account));
+    //         todos.add(card.toTodo(task, stack, account));
+    //       }
+    //     }
+    //   }
+    // });
   }
 
   final selectedTask = <Tasks>[].obs;
@@ -78,6 +87,7 @@ class TodoController extends GetxController {
     todos.assignAll(isar.todos.where().findAllSync());
     settings = await isar.settings.where().findFirst() ?? Settings();
     account = (await isar.accounts.where().findFirst())!;
+    _deviceCalendarPlugin = DeviceCalendarPlugin();
   }
 
   // Tasks
@@ -472,6 +482,28 @@ class TodoController extends GetxController {
           EasyLoading.showInfo('errorFile'.tr);
         }
       }
+    }
+  }
+
+  void _retrieveCalendars() async {
+    try {
+      var permissionsGranted = await _deviceCalendarPlugin.hasPermissions();
+      if (permissionsGranted.isSuccess &&
+          (permissionsGranted.data == null ||
+              permissionsGranted.data == false)) {
+        permissionsGranted = await _deviceCalendarPlugin.requestPermissions();
+        if (!permissionsGranted.isSuccess ||
+            permissionsGranted.data == null ||
+            permissionsGranted.data == false) {
+          return;
+        }
+      }
+
+      final calendarsResult = await _deviceCalendarPlugin.retrieveCalendars();
+      _calendars.addAll(calendarsResult.data as List<Calendar>);
+      print(_calendars);
+    } on PlatformException catch (e, s) {
+      debugPrint('RETRIEVE_CALENDARS: $e, $s');
     }
   }
 }
