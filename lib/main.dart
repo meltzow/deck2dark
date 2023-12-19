@@ -98,10 +98,12 @@ Future<void> initFirebase() async {
   );
 
   FlutterError.onError = (errorDetails) {
+    EasyLoading.showError("foobar");
     FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
   };
   // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
   PlatformDispatcher.instance.onError = (error, stack) {
+    EasyLoading.showError(error.toString());
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
   };
